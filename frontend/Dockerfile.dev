@@ -1,0 +1,12 @@
+FROM node:lts-alpine
+
+# Create app directory
+WORKDIR /app
+COPY package*.json ./
+# install app dependencies
+RUN npm install
+# Bundle app source
+COPY . .
+
+EXPOSE 5173
+CMD ["npm", "run", "dev"]

@@ -1,0 +1,46 @@
+version: '${DockerVersion}'
+
+services:
+  db:
+    container_name: cl23-exam-db
+    image: mariadb:latest
+    volumes:
+      - data:/var/lib/mysql
+    environment:
+        MARIADB_DATABASE: ${DB_DATABASE}
+        MARIADB_USER: ${DB_USER}
+        MARIADB_ROOT_PASSWORD: ${ROOT_PASSWORD}
+        MARIADB_PASSWORD: ${DB_PASSWORD}
+    
+
+  backend:
+    container_name: cl23-exam-backend
+    image: ${backendImage}
+    command: /bin/sh -c "npm run db:migrate && npm run db:seed
+            && node index.js"
+    environment:
+      PORT: ${API_PORT}
+      DB_USERNAME: ${DB_USER}
+      DB_HOSTNAME: ${DB_HOSTNAME}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "${API_PORT}:${API_PORT}"
+    depends_on:
+      db:
+        condition: service_started
+  
+  frontend:
+    container_name: cl23-exam-frontend
+    image: ${frontendImage}
+    depends_on:
+      db:
+        condition: service_started
+      backend:
+        condition: service_started
+    ports:
+    - "${FRONTEND_PORT}:${NGINX_PORT}"
+
+
+volumes:
+  data:

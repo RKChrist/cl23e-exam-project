@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: cl23-exam-db
+    image: mariadb:latest
+    volumes:
+      - data:/var/lib/mysql
+    environment:
+        MARIADB_DATABASE: zay_dev
+        MARIADB_USER: root
+        MARIADB_ROOT_PASSWORD: root
+        MARIADB_PASSWORD: root
+    
+
+  backend:
+    container_name: cl23-exam-backend
+    image: backend-prod
+    command: /bin/sh -c "npm run db:migrate && npm run db:seed
+            && node index.js"
+    environment:
+      PORT: 5000
+      DB_USERNAME: root
+      DB_HOSTNAME: db
+      DB_DATABASE: zay_dev
+      DB_PASSWORD: root
+    ports:
+      - "5000:5000"
+  
+  frontend:
+    container_name: cl23-exam-frontend
+    image: frontend-prod
+    ports:
+    - "8080:80"
+
+
+volumes:
+  data:

@@ -1,0 +1,15 @@
+FROM node:lts-alpine as build-stage
+
+
+# Create app directory
+WORKDIR /app
+COPY package*.json ./
+# install app dependencies
+RUN npm install
+# Bundle app source
+COPY . .
+# build app for production with minification
+
+# production stage
+EXPOSE 3000
+CMD ["npm", "run", "dev"]
