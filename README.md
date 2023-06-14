@@ -27,11 +27,13 @@ docker-build-prod.sh
 
 ## Startup development enviroment in docker compose
 docker compose --env-file ./config/.env.dev build
+
 docker compose --env-file ./config/.env.dev up -d
 
 ## Startup staging enviroment in docker compose
 Run commands:
 docker compose build
+
 docker compose up -d
 
 ## Docker Swarm with production
