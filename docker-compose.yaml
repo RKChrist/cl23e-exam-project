@@ -12,7 +12,6 @@ services:
         MARIADB_ROOT_PASSWORD: ${ROOT_PASSWORD}
         MARIADB_PASSWORD: ${DB_PASSWORD}
     
-
   backend:
     container_name: cl23-exam-backend
     image: ${backendImage}
@@ -40,7 +39,6 @@ services:
         condition: service_started
     ports:
     - "${FRONTEND_PORT}:${NGINX_PORT}"
-
 
 volumes:
   data:

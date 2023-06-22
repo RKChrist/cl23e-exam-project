@@ -1,4 +1,5 @@
 FROM node:lts-alpine as build-stage
+# node = build-stage
 # Create app directory
 WORKDIR /app
 COPY package*.json ./
@@ -11,11 +12,12 @@ RUN npm run build
 
 # Static files from hereon
 
-# demo stage
+# PROD stage = nginx
 FROM nginx:stable-alpine as prod-stage
 ## Remove default nginx index page
 RUN rm -rf /usr/share/nginx/html/*
 COPY --from=build-stage /app/dist /usr/share/nginx/html
-
+# Copy nginx configuration¨
+COPY default.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
